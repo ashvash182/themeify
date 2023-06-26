@@ -57,10 +57,6 @@ cur.execute("""
 # cur.execute(""" DROP TABLE themeify_data """)
 # conn.commit()
 
-def generate_random_string(length):
-    letters = string.ascii_letters + string.digits
-    return ''.join(random.choice(letters) for _ in range(length))
-
 @app.route('/login', methods=['GET', 'POST'])
 def login_redir():
     params = {'client_id' : client_id,
