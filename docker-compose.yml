@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    image: ashvash182/themeify-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    networks:
+      - my-network
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/letsencrypt/live/themeify.net:/etc/nginx/certs
+
+  backend:
+    restart: always
+    image: ashvash182/themeify-backend
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      my-network:
+        aliases:  
+            - flask-app
+    volumes:
+      - ./backend:/usr/src/app
+
+  # letsencrypt:
+  #   container_name: 'certbot'
+  #   image: certbot/certbot:v1.17.0
+  #   command: sh -c "certbot certonly --expand --webroot -w /tmp/acme_challenge -d my-laptop.themeify.net --text --agree-tos --email anshosca@gmail.com --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
+  #   entrypoint: ""
+  #   volumes:
+  #     - "/etc/letsencrypt:/etc/letsencrypt"
+  #     - "/tmp/acme_challenge:/tmp/acme_challenge"
+  #   environment:
+  #     - TERM=xterm
+
+networks:
+    my-network:
