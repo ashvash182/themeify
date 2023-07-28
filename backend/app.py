@@ -33,7 +33,7 @@ def login_redir():
     params = {'client_id' : client_id,
               'response_type': 'code',
               'scope' : scope,
-              'redirect_uri' : redirect_uri
+              'redirect_uri' : 'http://my-laptop.themeify.net/home'
               }
     return jsonify('http://accounts.spotify.com/authorize?' + urlencode(params))
 
@@ -137,10 +137,8 @@ def get_user_themes():
     )
 
     tokens += response.usage.total_tokens
-    output = response.choices[0].message.content.split(", ")
+    output = response.choices[0].message.content
 
-    # expected_format = '\w+, \w+, \w+, \w+, \w+, \w+, \w+, \w+'
-    # SET UP REGEX CHECKS FOR OUTPUT FORMAT
     # tokens = 0
     # output = ['nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia']
     return jsonify({'themes' : output, 'tokens' : tokens})

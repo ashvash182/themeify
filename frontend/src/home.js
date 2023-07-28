@@ -13,6 +13,9 @@ function Home() {
     const [userInfo, setUserInfo] = useState(null)
 
     useEffect(() => {
+        let body = document.getElementById('outerbody')
+        body.classList.add('bg-back')   
+        body.classList.add('bg-cover') 
         // Writ failsafe for if 'code' isn't in url
         const code = new URLSearchParams(new URL(window.location.href).search).get('code')
         // Implement some kind of loading component while the themes/tracks are retrieved
@@ -27,13 +30,13 @@ function Home() {
                     access_token : res.data.token_info.access_token
                 }})
                 .then(res => {
-                    console.log(res.data)
                     setUserInfo({'displayName' : res.data.user.display_name, 'userID' : res.data.user.id, 'imageURL' : res.data.user.images[0].url})
                     setLoadStatus('discovering ' + res.data.user.display_name + '\'s vibes...')
                     api.post('/api/find-themes', { params : {
                         access_token : res.data.access_token
                     }})
                     .then(res => {
+                        console.log(res.data)
                         setThemes(res.data.themes)
                         setLoadStatus(false)
                     })
@@ -45,11 +48,12 @@ function Home() {
     useEffect(() => {
         if (themes != null) { 
             let body = document.getElementById('outerbody')
+            let themeList = themes.split(',')
             body.classList= ''
             body.classList.add('bg-blackback')   
             body.classList.add('bg-cover') 
-            for (let i = 0; i < themes.length; i++) {
-                let currTheme = themes[i]
+            for (let i = 0; i < themeList.length; i++) {
+                let currTheme = themeList[i]
                 let currPos = 'pos' + (i+1).toString()
                 document.getElementById(currPos).innerHTML = currTheme
             }

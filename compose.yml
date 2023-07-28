@@ -3,12 +3,13 @@ version: '3'
 services:
   frontend:
     container_name: frontend
-    image: ashvash182/themeify-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
     networks:
-      - my-network
+      my-network:
+        aliases:
+          - react-app
     ports:
       - 80:80
       - 443:443
@@ -17,7 +18,6 @@ services:
 
   backend:
     restart: always
-    image: ashvash182/themeify-backend
     container_name: backend
     build:
       context: ./backend
