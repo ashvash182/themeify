@@ -25,7 +25,7 @@ openai.api_key = os.getenv('OPENAI_KEY')
 
 client_id = os.getenv('SPOTIFY_CLIENT_ID')
 client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
-redirect_uri = 'http://my-laptop.themeify.net/home'
+redirect_uri = 'http://themeify.net/home'
 scope = 'user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state user-read-currently-playing user-top-read user-follow-read'
 
 @app.route('/api/login', methods=['GET', 'POST'])
@@ -33,7 +33,7 @@ def login_redir():
     params = {'client_id' : client_id,
               'response_type': 'code',
               'scope' : scope,
-              'redirect_uri' : 'http://my-laptop.themeify.net/home'
+              'redirect_uri' : 'http://themeify.net/home'
               }
     return jsonify('http://accounts.spotify.com/authorize?' + urlencode(params))
 
