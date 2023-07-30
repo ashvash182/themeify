@@ -25,18 +25,20 @@ openai.api_key = os.getenv('OPENAI_KEY')
 
 client_id = os.getenv('SPOTIFY_CLIENT_ID')
 client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
-redirect_uri = 'http://themeify.net/home'
+redirect_uri = 'http://my-laptop.themeify.net/home'
 scope = 'user-read-email user-read-private user-library-read user-library-modify user-read-playback-state user-modify-playback-state user-read-currently-playing user-top-read user-follow-read'
 
+@no_cache
 @app.route('/api/login', methods=['GET', 'POST'])
 def login_redir():
     params = {'client_id' : client_id,
               'response_type': 'code',
               'scope' : scope,
-              'redirect_uri' : 'http://themeify.net/home'
+              'redirect_uri' : 'http://my-laptop.themeify.net/home'
               }
     return jsonify('http://accounts.spotify.com/authorize?' + urlencode(params))
 
+@no_cache
 @app.route('/api/access-token-grant', methods=['GET', 'POST'])
 def get_access_token():
     code = request.json['params']['code']
@@ -52,6 +54,7 @@ def get_access_token():
 
     return jsonify({'token_info' : token_info})
 
+@no_cache
 @app.route('/api/user-info', methods = ['GET', 'POST'])
 def get_user_info():
     access_token = request.json['params']['access_token']
@@ -66,6 +69,7 @@ def get_user_info():
 
     return jsonify({'user' : userInfo, 'access_token' : access_token, 'tracks' : data})
 
+@no_cache
 @app.route('/api/find-themes', methods=['GET', 'POST'])
 def get_user_themes():
     access_token = request.json['params']['access_token']
@@ -142,3 +146,9 @@ def get_user_themes():
     # tokens = 0
     # output = ['nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia']
     return jsonify({'themes' : output, 'tokens' : tokens})
+
+def add_header(response):    
+  response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+  if ('Cache-Control' not in response.headers):
+    response.headers['Cache-Control'] = 'public, max-age=600'
+  return response
