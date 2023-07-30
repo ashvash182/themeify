@@ -143,8 +143,9 @@ def get_user_themes():
     # output = ['nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia, nostalgia']
     return jsonify({'themes' : output, 'tokens' : tokens})
 
+@app.after_request
 def add_header(response):    
-  response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-  if ('Cache-Control' not in response.headers):
-    response.headers['Cache-Control'] = 'public, max-age=600'
-  return response
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
